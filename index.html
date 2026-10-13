@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101010">
+<meta name="description" content="Apex Cinema - आपका अपना ऑनलाइन सिनेमा">
+<title>Apex Cinema</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101010;color:white;font-family:Arial,sans-serif}
+header{display:flex;align-items:center;gap:20px;padding:18px 5%;background:#151515;position:sticky;top:0;z-index:2}
+.logo{font-size:24px;font-weight:900;color:#e50914}
+nav{display:flex;gap:15px}
+nav a{color:white;text-decoration:none}
+#search{margin-left:auto;padding:10px;width:220px;max-width:45%;background:#222;color:white;border:1px solid #555;border-radius:5px}
+.hero{padding:75px 6%;min-height:350px;background:linear-gradient(90deg,#101010,#101010b0),linear-gradient(135deg,#5b1018,#161616)}
+.hero h1{font-size:clamp(36px,7vw,65px);margin:15px 0}
+.hero p{color:#ddd;line-height:1.7;max-width:500px}
+button{cursor:pointer;border:0;border-radius:5px;padding:12px 18px;font-weight:bold}
+.red{background:#e50914;color:white}
+.gray{background:#444;color:white}
+main{padding:20px 5% 45px}
+h2{font-size:22px;margin-top:30px}
+.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:15px}
+.card{cursor:pointer;min-width:0;transition:transform .2s}
+.card:hover{transform:scale(1.04)}
+.card img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:7px;background:#252525}
+.card h3{font-size:15px;margin:8px 0}
+.card p{color:#aaa;font-size:12px;margin:5px 0}
+footer{padding:25px 5%;border-top:1px solid #333;color:#999}
+dialog{width:94%;max-width:850px;background:#181818;color:white;border:1px solid #444;border-radius:10px}
+dialog video{width:100%;max-height:65vh;background:black}
+.dialoghead{display:flex;align-items:center;justify-content:space-between}
+#message{color:#ccc;line-height:1.6}
+@media(max-width:700px){
+ header{flex-wrap:wrap;gap:12px;padding:14px 4%}
+ .logo{font-size:21px}
+ nav{order:3;width:100%;overflow:auto}
+ #search{width:43%}
+ .hero{padding:55px 5%}
+ main{padding-left:4%;padding-right:4%}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">APEX CINEMA</div>
+  <nav>
+    <a href="#">होम</a>
+    <a href="#movies">फिल्में</a>
+    <a href="#videos">मेरे वीडियो</a>
+  </nav>
+  <input id="search" type="search" placeholder="फिल्म खोजें...">
+</header>
+
+<section class="hero">
+  <div style="color:#ff5962;font-weight:bold;letter-spacing:3px">YOUR PERSONAL CINEMA</div>
+  <h1>मनोरंजन की नई दुनिया</h1>
+  <p>अपनी पसंद की फिल्में और वीडियो एक ही जगह खोजें। मोबाइल पर अपने सिनेमा का आनंद लें।</p>
+  <button class="red" onclick="document.querySelector('#movies').scrollIntoView({behavior:'smooth'})">▶ फिल्में देखें</button>
+  <button class="gray" onclick="document.querySelector('#videos').scrollIntoView({behavior:'smooth'})">मेरे वीडियो</button>
+</section>
+
+<main>
+  <h2 id="movies">🔥 लोकप्रिय फिल्में</h2>
+  <div class="grid" id="grid"></div>
+  <h2 id="videos">🎬 मेरी वीडियो लाइब्रेरी</h2>
+  <p style="color:#aaa;line-height:1.7">अपनी वीडियो जोड़ने के लिए नीचे कोड में MOVIES सूची की video वैल्यू में अपनी वीडियो का सीधा लिंक डालें।</p>
+</main>
+
+<dialog id="player">
+  <div class="dialoghead">
+    <h2 id="title">फिल्म</h2>
+    <button class="gray" onclick="closePlayer()">✕ बंद करें</button>
+  </div>
+  <video id="video" controls playsinline></video>
+  <p id="message">इस फिल्म का वीडियो लिंक अभी नहीं जोड़ा गया है।</p>
+</dialog>
+
+<footer>© 2026 Apex Cinema · आपका अपना डिजिटल सिनेमा</footer>
+
+<script>
+const MOVIES = [
+ {
+  title:"मेरी पहली फिल्म",
+  genre:"ड्रामा",
+  year:"2026",
+  poster:"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500",
+  video:""
+ },
+ {
+  title:"एक्शन नाइट",
+  genre:"एक्शन",
+  year:"2026",
+  poster:"https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?w=500",
+  video:""
+ },
+ {
+  title:"रहस्यमयी दुनिया",
+  genre:"थ्रिलर",
+  year:"2026",
+  poster:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500",
+  video:""
+ },
+ {
+  title:"सफर",
+  genre:"एडवेंचर",
+  year:"2026",
+  poster:"https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=500",
+  video:""
+ },
+ {
+  title:"नई कहानी",
+  genre:"ड्रामा",
+  year:"2026",
+  poster:"https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=500",
+  video:""
+ }
+];
+
+const grid=document.getElementById("grid");
+const dialog=document.getElementById("player");
+const video=document.getElementById("video");
+
+function renderMovies(query=""){
+ const found=MOVIES.map((m,i)=>({...m,index:i})).filter(m=>
+   (m.title+" "+m.genre).toLowerCase().includes(query.toLowerCase())
+ );
+ grid.innerHTML="";
+ if(!found.length){
+   grid.innerHTML="<p>कोई फिल्म नहीं मिली।</p>";
+   return;
+ }
+ found.forEach(m=>{
+   const card=document.createElement("article");
+   card.className="card";
+   const img=document.createElement("img");
+   img.src=m.poster;
+   img.alt=m.title;
+   img.loading="lazy";
+   img.onerror=()=>{img.style.visibility="hidden"};
+   const name=document.createElement("h3");
+   name.textContent=m.title;
+   const info=document.createElement("p");
+   info.textContent=m.genre+" · "+m.year;
+   card.append(img,name,info);
+   card.onclick=()=>openMovie(m.index);
+   grid.appendChild(card);
+ });
+}
+
+function openMovie(index){
+ const m=MOVIES[index];
+ document.getElementById("title").textContent=m.title;
+ video.pause();
+ video.removeAttribute("src");
+ video.load();
+ if(m.video){
+   video.src=m.video;
+   document.getElementById("message").textContent="यदि वीडियो नहीं चलता, तो लिंक का सीधा वीडियो URL होना चाहिए।";
+ }else{
+   document.getElementById("message").textContent="वीडियो अभी नहीं जोड़ा गया है। MOVIES सूची में video के आगे अपना वीडियो लिंक डालें।";
+ }
+ if(!dialog.open)dialog.showModal();
+}
+
+function closePlayer(){
+ video.pause();
+ dialog.close();
+}
+document.getElementById("search").addEventListener("input",e=>renderMovies(e.target.value));
+renderMovies();
+</script>
+</body>
+</html>
